@@ -85,8 +85,8 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
-            name = "Lavadsp"
-            url = "https://github.com/topisenpai/lavadsp"
+
+
             from components.java
         }
     }
