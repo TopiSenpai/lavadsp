@@ -59,9 +59,10 @@ jobs:
             src/main/resources/natives/linux-musl-aarch64
           key: linux-arm-${{ hashFiles('natives/**') }}
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         if: steps.cache-natives.outputs.cache-hit != 'true'
         with:
+          distribution: zulu
           java-version: 15
           architecture: armv7
       - name: Install ARM compilers
