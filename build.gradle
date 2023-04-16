@@ -3,12 +3,11 @@ plugins {
     id 'maven'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'com.jfrog.bintray' version '1.8.5'
 }
 
 def versionObj = new Version(major: 0, minor: 7, revision: 7)
 
-group 'com.github.natanbc'
+group 'com.github.topisenpai'
 version "${versionObj}"
 
 sourceCompatibility = 1.8
@@ -71,37 +70,24 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 
 publishing {
-    publications {
-        BintrayRelease(MavenPublication) {
-            from components.java
-            groupId group
-            artifactId archivesBaseName
-
-            artifact sourcesJar {
-                classifier 'sources'
+    repositories {
+        maven {
+            name = "maven.topi.wtf"
+            url = "https://maven.topi.wtf/releases"
+            credentials {
+                password = getProjectProperty("mavenPassword")
+                username = getProjectProperty("mavenUsername")
             }
-
-            artifact javadocJar {
-                classifier 'javadoc'
+            authentication {
+                basic(BasicAuthentication)
             }
         }
     }
-}
-
-bintray {
-    version = "${versionObj}"
-    user = getProjectProperty("BINTRAY_USERNAME")
-    key = getProjectProperty("BINTRAY_API_KEY")
-    publications = ["BintrayRelease"]
-    pkg {
-        repo = 'maven'
-        name = project.name
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/natanbc/lavadsp.git'
-        publish = true
-        version {
-            name = project.version.toString()
-            released = new Date()
+    publications {
+        maven(MavenPublication) {
+            name = "Lavadsp"
+            url = "https://github.com/topisenpai/lavadsp"
+            from components.java
         }
     }
 }
@@ -114,13 +100,6 @@ String getProjectProperty(String propertyName) {
         property = System.getenv(propertyName) ?: ""
     }
     return property
-}
-
-bintrayUpload {
-    dependsOn shadowJar
-
-    onlyIf { !getProjectProperty("BINTRAY_USERNAME").empty }
-    onlyIf { !getProjectProperty("BINTRAY_API_KEY").empty }
 }
 
 static def getCommitHash() {
