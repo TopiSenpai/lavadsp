@@ -63,6 +63,7 @@ jobs:
         if: steps.cache-natives.outputs.cache-hit != 'true'
         with:
           java-version: 15
+          architecture: armv7
       - name: Install ARM compilers
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
