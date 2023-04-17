@@ -92,7 +92,7 @@ project.ext.isWindows = { platform ->
     return platformName(platform).startsWith("windows_")
 }
 project.ext.isUnix = { platform ->
-    return isDarwin(platform) || isFreebsd(platform) || isLinux(platform)
+    return isDarwin(platform) || isLinux(platform)
 }
 project.ext.isGlibc = { platform ->
     return platformName(platform).startsWith("linux_glibc_")
