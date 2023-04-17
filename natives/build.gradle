@@ -73,9 +73,6 @@ model {
             //todo arm vectorization
             }
 
-            if(isFreebsd(targetPlatform)) {
-                lib library: 'freebsd_headers', linkage: 'api'
-            }
             if(isGlibc(targetPlatform)) {
                 def base = project.projectDir.toString()
                 def suffix = isX86_64(targetPlatform) ? "x86-64"
