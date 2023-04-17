@@ -56,7 +56,6 @@ jobs:
           path: |
             src/main/resources/natives/linux-arm
             src/main/resources/natives/linux-aarch64
-            src/main/resources/natives/linux-musl-aarch64
           key: linux-arm-${{ hashFiles('natives/**') }}
       - name: Set up JDK
         uses: actions/setup-java@v3
