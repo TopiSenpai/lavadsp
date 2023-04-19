@@ -110,39 +110,6 @@ jobs:
         with:
           name: mac-natives
           path: src/main/resources/natives/*
-  freebsd-natives:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - name: Cache natives
-        uses: actions/cache@v2
-        id: cache-natives
-        with:
-          path: |
-            src/main/resources/natives/freebsd-x86-64
-          key: freebsd-${{ hashFiles('natives/**') }}
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        if: steps.cache-natives.outputs.cache-hit != 'true'
-        with:
-          java-version: 15
-      - name: Install freebsd compiler
-        if: steps.cache-natives.outputs.cache-hit != 'true'
-        run: |
-            mkdir freebsd_sysroot
-            curl -s http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/amd64/11.4-RELEASE/base.txz \
-                | tar -xJf - -C freebsd_sysroot ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc
-      - name: Build freebsd natives
-        if: steps.cache-natives.outputs.cache-hit != 'true'
-        run: |
-          chmod +x gradlew
-          ./gradlew buildFreebsd64
-      - uses: actions/upload-artifact@v2
-        with:
-          name: freebsd-natives
-          path: src/main/resources/natives/*
   windows-natives:
     runs-on: windows-2019
     steps:
@@ -171,7 +138,7 @@ jobs:
           name: windows-natives
           path: src/main/resources/natives/*
   build:
-    needs: [linux-x86-natives, linux-arm-natives, mac-natives, freebsd-natives, windows-natives]
+    needs: [linux-x86-natives, linux-arm-natives, mac-natives, windows-natives]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -187,10 +154,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: mac-natives
-          path: src/main/resources/natives/
-      - uses: actions/download-artifact@v2
-        with:
-          name: freebsd-natives
           path: src/main/resources/natives/
       - uses: actions/download-artifact@v2
         with:
