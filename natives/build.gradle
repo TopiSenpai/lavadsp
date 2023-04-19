@@ -98,7 +98,7 @@ tasks.withType(LinkSharedLibrary) {
             return
         }
         def baseName = filename.substring(0, filename.lastIndexOf('.'))
-        filename = baseName + "-avx2" + filename.substring(filename.lastIndexOf('.'))
+        filename = baseName + "-avx2" + ".dylib"
     } else { // keep darwin avx2 natives with the default name, no need to avoid conflict with arm64
         if(isDarwin(target)) {
             def baseName = filename.substring(0, filename.lastIndexOf('.'))
