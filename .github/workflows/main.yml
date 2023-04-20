@@ -62,9 +62,9 @@ jobs:
         uses: actions/setup-java@v3
         if: steps.cache-natives.outputs.cache-hit != 'true'
         with:
-          distribution: liberica
+          distribution: zulu
           java-version: 13
-          architecture: armv7
+          architecture: aarch64
       - name: Install ARM compilers
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
