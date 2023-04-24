@@ -8,7 +8,7 @@ on:
 
 jobs:
   linux-x86-natives:
-    runs-on: ubuntu-18.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
         with:
@@ -44,7 +44,7 @@ jobs:
           name: linux-x86-natives
           path: src/main/resources/natives/*
   linux-arm-natives:
-    runs-on: ubuntu-18.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
         with:
