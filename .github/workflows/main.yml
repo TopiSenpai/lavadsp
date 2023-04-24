@@ -44,7 +44,7 @@ jobs:
           name: linux-x86-natives
           path: src/main/resources/natives/*
   linux-arm-natives:
-    runs-on: self-hosted
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -64,7 +64,6 @@ jobs:
         with:
           distribution: zulu
           java-version: 13
-          architecture: aarch64
       - name: Install ARM compilers
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
