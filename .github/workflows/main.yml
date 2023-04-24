@@ -167,13 +167,13 @@ jobs:
         with:
           name: jar
           path: build/libs/*.jar
-      - name: Bintray upload
+      - name: Maven upload
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           export TAG="$(echo $GITHUB_REF | grep -q refs/tags && echo ${GITHUB_REF/refs\/tags\/} || echo '')"
           if [ "$TAG" != "" ]; then
-            ./gradlew bintrayUpload
+            ./gradlew publish -PmavenUsername=$MAVENUSERNAME -PmavenPassword=$MAVENPASSWORD -Pversion=$TAG
           fi
         env:
-          BINTRAY_USERNAME: ${{ secrets.BINTRAY_USERNAME }}
-          BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+          MAVENUSERNAME: ${{ secrets.MAVENUSERNAME }}
+          MAVENPASSWORD: ${{ secrets.MAVENPASSWORD }}
