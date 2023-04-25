@@ -31,7 +31,7 @@ jobs:
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
           sudo apt update
-          sudo apt install libc6-dev-i386 linux-libc-dev g++-multilib
+          sudo apt install -y libc6-dev-i386 linux-libc-dev g++-multilib
           curl -sL https://github.com/natanbc/actions-binaries/releases/download/1/x86_64-linux-musl-cross.tgz -o - | tar xzf -
       - name: Build x86 natives
         if: steps.cache-natives.outputs.cache-hit != 'true'
@@ -69,8 +69,8 @@ jobs:
         run: |
           # installing these two breaks i386 compilation
           # https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1300211
-          sudo apt install g++-arm-linux-gnueabihf
-          sudo apt install g++-aarch64-linux-gnu
+          sudo apt -y install -g++-arm-linux-gnueabihf
+          sudo apt -y install g++-aarch64-linux-gnu
           curl -sL https://github.com/natanbc/actions-binaries/releases/download/1/aarch64-linux-musl-cross.tgz -o - | tar xzf -
       - name: Build ARM natives
         if: steps.cache-natives.outputs.cache-hit != 'true'
