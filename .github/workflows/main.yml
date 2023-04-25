@@ -69,7 +69,7 @@ jobs:
         run: |
           # installing these two breaks i386 compilation
           # https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1300211
-          sudo apt -y install -g++-arm-linux-gnueabihf
+          sudo apt -y install g++-arm-linux-gnueabihf
           sudo apt -y install g++-aarch64-linux-gnu
           curl -sL https://github.com/natanbc/actions-binaries/releases/download/1/aarch64-linux-musl-cross.tgz -o - | tar xzf -
       - name: Build ARM natives
