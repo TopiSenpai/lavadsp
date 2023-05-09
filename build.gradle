@@ -10,8 +10,8 @@ def versionObj = new Version(major: 0, minor: 0, revision: 2)
 group 'com.github.topisenpai'
 version "${versionObj}"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     jcenter()
