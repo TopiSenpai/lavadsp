@@ -18,11 +18,15 @@ package com.github.natanbc.lavadsp.natives;
 
 import com.github.natanbc.nativeloader.NativeLibLoader;
 import com.github.natanbc.nativeloader.feature.X86Feature;
+import com.github.natanbc.nativeloader.system.DefaultArchitectureTypes;
+import com.github.natanbc.nativeloader.system.ArchitectureType;
+
+import java.util.Set;
 
 public class TimescaleNativeLibLoader {
     private static final NativeLibLoader LOADER = NativeLibLoader.create(TimescaleNativeLibLoader.class, "timescale");
-    private static final NativeLibLoader LOADER_AVX2 = NativeLibLoader.create(TimescaleNativeLibLoader.class, "timescale")
-            .withFeature(X86Feature.AVX2);
+    private static final NativeLibLoader LOADER_AVX2 = NativeLibLoader.create(TimescaleNativeLibLoader.class, "timescale").withFeature(X86Feature.AVX2);
+    private static final Set<ArchitectureType> EXCLUDE_AVX2 = Set.of(DefaultArchitectureTypes.ARM, DefaultArchitectureTypes.ARM_HF, DefaultArchitectureTypes.ARMv8_32, DefaultArchitectureTypes.ARMv8_64);
     private static volatile boolean loaded = false;
     private static volatile String soundTouchVersion;
     private static volatile int soundTouchVersionID;
@@ -30,10 +34,9 @@ public class TimescaleNativeLibLoader {
 
     public static void loadTimescaleLibrary() {
         if(loaded) return;
-        // M1 code
-        String osName = System.getProperty("os.name").toLowerCase();
-        String osArch = System.getProperty("os.arch").toLowerCase();
-        if(osName.equals("mac os x") && osArch.equals("aarch64")) {
+
+        // override for arm, armhf, aarch32, aarch64 to load the non-avx2 version
+        if(EXCLUDE_AVX2.contains(DefaultArchitectureTypes.detect())) {
             LOADER.load();
         } else {
             LOADER_AVX2.load();
