@@ -2,3 +2,5 @@
 .gradle/
 *.log
 .idea/
+build/
+gradle.properties

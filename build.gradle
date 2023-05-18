@@ -7,7 +7,7 @@ plugins {
 
 def versionObj = new Version(major: 0, minor: 0, revision: 3)
 
-group 'com.github.topisenpai'
+group 'dev.arbjerg'
 version "${versionObj}"
 
 sourceCompatibility = 11
@@ -89,8 +89,6 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
-
-
             from components.java
         }
     }
