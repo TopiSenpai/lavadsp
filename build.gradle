@@ -76,14 +76,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 publishing {
     repositories {
         maven {
-            name = "maven.topi.wtf"
-            url = "https://maven.topi.wtf/releases"
+            url = "https://maven.arbjerg.dev/releases"
             credentials {
-                password = getProjectProperty("mavenPassword")
-                username = getProjectProperty("mavenUsername")
-            }
-            authentication {
-                basic(BasicAuthentication)
+                password = findProperty("mavenPassword")
+                username = findProperty("mavenUsername")
             }
         }
     }
@@ -92,16 +88,6 @@ publishing {
             from components.java
         }
     }
-}
-
-String getProjectProperty(String propertyName) {
-    String property
-    if(hasProperty(propertyName)) {
-        property = project.properties[propertyName]
-    } else {
-        property = System.getenv(propertyName) ?: ""
-    }
-    return property
 }
 
 static def getCommitHash() {
