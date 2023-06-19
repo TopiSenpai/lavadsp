@@ -5,10 +5,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-def versionObj = new Version(major: 0, minor: 0, revision: 3)
-
 group 'dev.arbjerg'
-version "${versionObj}"
 
 sourceCompatibility = 11
 targetCompatibility = 11
@@ -35,9 +32,7 @@ task sourcesForRelease(type: Copy) {
     from 'src/main/java'
     into 'build/filteredSrc'
     filter(ReplaceTokens, tokens: [
-            VERSION_MAJOR: versionObj.getMajor(),
-            VERSION_MINOR: versionObj.getMinor(),
-            VERSION_REVISION: versionObj.getRevision(),
+            VERSION: version ?: 'dev',
             COMMIT_HASH: getCommitHash()
     ])
 }
@@ -54,7 +49,7 @@ compileJava {
 jar {
     baseName = project.name
     manifest {
-        attributes 'Implementation-Version': version
+        attributes 'Implementation-Version': archiveVersion ?: 'dev'
     }
 }
 
@@ -94,14 +89,5 @@ static def getCommitHash() {
     def p = Runtime.getRuntime().exec("git rev-parse HEAD")
     p.waitFor()
     p.getIn().text.trim()
-}
-
-class Version {
-    String major, minor, revision
-
-
-    String toString() {
-        "${major}.${minor}" + (revision == "0" ? "" : ".${revision}")
-    }
 }
 

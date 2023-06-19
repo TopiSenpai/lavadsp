@@ -22,37 +22,20 @@ package com.github.natanbc.lavadsp;
 @SuppressWarnings("WeakerAccess")
 public final class DspInfo {
     /**
-     * Library major version.
+     * Library version.
      */
-    public static final String VERSION_MAJOR;
+    public static final String VERSION;
 
-    /**
-     * Library minor version.
-     */
-    public static final String VERSION_MINOR;
-
-    /**
-     * Library revision.
-     */
-    public static final String VERSION_REVISION;
 
     /**
      * Latest commit hash as of build time.
      */
     public static final String COMMIT_HASH;
 
-    /**
-     * Library version, in the format {@code MAJOR.MINOR.REVISION}.
-     */
-    public static final String VERSION;
 
     static {
-        VERSION_MAJOR = "@VERSION_MAJOR@";
-        VERSION_MINOR = "@VERSION_MINOR@";
-        VERSION_REVISION = "@VERSION_REVISION@";
+        VERSION = "@VERSION@";
         COMMIT_HASH = "@COMMIT_HASH@";
-        //noinspection ConstantConditions
-        VERSION = VERSION_MAJOR.startsWith("@") ? "Dev" : String.format("%s.%s.%s", VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION);
     }
 
     private DspInfo() {}
