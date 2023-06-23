@@ -14,7 +14,7 @@ jobs:
       - name: Install newer git
         run: |
           apt update
-          apt install software-properties-common
+          apt install software-properties-common -y
           add-apt-repository ppa:git-core/ppa -y
           apt update
           apt install git -y
