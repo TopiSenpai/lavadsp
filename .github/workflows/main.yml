@@ -38,8 +38,8 @@ jobs:
       - name: Install x86 compilers
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
-          sudo apt update
-          sudo apt install -y libc6-dev-i386 linux-libc-dev g++-multilib
+          apt update
+          install -y libc6-dev-i386 linux-libc-dev g++-multilib
           curl -sL https://github.com/natanbc/actions-binaries/releases/download/1/x86_64-linux-musl-cross.tgz -o - | tar xzf -
       - name: Build x86 natives
         if: steps.cache-natives.outputs.cache-hit != 'true'
