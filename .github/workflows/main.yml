@@ -144,6 +144,9 @@ jobs:
   build:
     needs: [linux-x86-natives, linux-arm-natives, mac-natives, windows-natives]
     runs-on: ubuntu-20.04
+    env:
+      MAVEN_USERNAME: ${{ vars.MAVEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - run: mkdir -p src/main/resources/natives
@@ -173,12 +176,4 @@ jobs:
           name: jar
           path: build/libs/*.jar
       - name: Maven upload
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          export TAG="$(echo $GITHUB_REF | grep -q refs/tags && echo ${GITHUB_REF/refs\/tags\/} || echo '')"
-          if [ "$TAG" != "" ]; then
-            ./gradlew publish -PmavenUsername=$MAVENUSERNAME -PmavenPassword=$MAVENPASSWORD -Pversion=$TAG
-          fi
-        env:
-          MAVENUSERNAME: ${{ secrets.MAVENUSERNAME }}
-          MAVENPASSWORD: ${{ secrets.MAVENPASSWORD }}
+        run: ./gradlew publish -PmavenUsername=$MAVEN_USERNAME -PmavenPassword=$MAVEN_PASSWORD

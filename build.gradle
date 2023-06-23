@@ -1,11 +1,14 @@
 plugins {
     id 'java-library'
-    id 'maven'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
+archivesBaseName = 'lavadsp'
 group 'dev.arbjerg'
+def (versionStr, isSnapshot) = getGitVersion()
+version versionStr
+println "Version: " + versionStr
 
 sourceCompatibility = 11
 targetCompatibility = 11
@@ -13,17 +16,16 @@ targetCompatibility = 11
 repositories {
     jcenter()
     maven {
-        name "topi"
-        url "https://maven.topi.wtf/releases"
+        url "https://maven.arbjerg.dev/releases"
     }
 }
 
 dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.topisenpai:native-loader:0.0.2'
+    implementation 'dev.arbjerg:native-loader:0.0.1'
     compileOnly 'com.sedmelluq:lavaplayer:1.3.66'
-    testCompile 'com.sedmelluq:lavaplayer:1.3.66'
-    testCompile 'ch.qos.logback:logback-classic:1.2.3'
+    testImplementation 'com.sedmelluq:lavaplayer:1.3.66'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -47,42 +49,46 @@ compileJava {
 }
 
 jar {
-    baseName = project.name
     manifest {
         attributes 'Implementation-Version': archiveVersion ?: 'dev'
     }
 }
 
 shadowJar {
-    classifier = "withDependencies"
+    archiveClassifier  = "withDependencies"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier  = 'sources'
     from "${buildDir}/filteredSrc"
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier  = 'javadoc'
     from javadoc.destinationDir
 }
 
+def getGitVersion() {
+    def versionStr = new ByteArrayOutputStream()
+    def result = exec {
+        standardOutput versionStr
+        errorOutput versionStr
+        ignoreExitValue true
+        commandLine "git", "describe", "--exact-match", "--tags"
+    }
+    if (result.exitValue == 0) {
+        return [versionStr.toString().trim(), false]
+    }
 
-publishing {
-    repositories {
-        maven {
-            url = "https://maven.arbjerg.dev/releases"
-            credentials {
-                password = findProperty("mavenPassword")
-                username = findProperty("mavenUsername")
-            }
-        }
+
+    versionStr = new ByteArrayOutputStream()
+    exec {
+        standardOutput versionStr
+        errorOutput versionStr
+        commandLine "git", "rev-parse", "--short", "HEAD"
     }
-    publications {
-        maven(MavenPublication) {
-            from components.java
-        }
-    }
+
+    return [versionStr.toString().trim(), true]
 }
 
 static def getCommitHash() {
@@ -91,3 +97,31 @@ static def getCommitHash() {
     p.getIn().text.trim()
 }
 
+
+def isMavenDefined = findProperty("MAVEN_USERNAME") != null && findProperty("MAVEN_PASSWORD") != null
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+    if (isMavenDefined) {
+        System.out.println("Publishing to Maven Repo")
+        repositories {
+            def snapshots = "https://maven.arbjerg.dev/snapshots"
+            def releases = "https://maven.arbjerg.dev/releases"
+
+            maven {
+                name = "Reposilite"
+                url = isSnapshot ? snapshots : releases
+                credentials {
+                    username = findProperty("MAVEN_USERNAME")
+                    password = findProperty("MAVEN_PASSWORD")
+                }
+            }
+        }
+    } else {
+        System.out.println("Maven credentials not found, not publishing to Maven Repo")
+    }
+}
