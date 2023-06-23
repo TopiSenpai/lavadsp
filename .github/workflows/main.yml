@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Install newer git
         run: |
+          apt update
+          apt install software-properties-common
           add-apt-repository ppa:git-core/ppa -y
           apt update
           apt install git -y
