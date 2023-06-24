@@ -44,6 +44,7 @@ jobs:
       - name: Build x86 natives
         if: steps.cache-natives.outputs.cache-hit != 'true'
         run: |
+          git config --global --add safe.directory '*'
           chmod +x gradlew
           export PATH="$PATH:$(pwd)/x86_64-linux-musl-cross/bin"
           ./gradlew buildLinuxGlibc32 buildLinuxGlibc64 buildLinuxMusl64
