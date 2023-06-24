@@ -11,8 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu:18.04
     steps:
-      - name: Install curl and git
+      - name: Install curl & newer git
         run: |
+          apt update
+          apt install software-properties-common -y
+          add-apt-repository ppa:git-core/ppa -y
           apt update
           apt install curl git -y
       - uses: actions/checkout@v2
