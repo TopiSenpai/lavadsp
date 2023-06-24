@@ -72,7 +72,6 @@ def getGitVersion() {
     def versionStr = new ByteArrayOutputStream()
     def result = exec {
         standardOutput versionStr
-        errorOutput versionStr
         ignoreExitValue true
         commandLine "git", "describe", "--exact-match", "--tags"
     }
@@ -82,10 +81,13 @@ def getGitVersion() {
 
 
     versionStr = new ByteArrayOutputStream()
-    exec {
+    result = exec {
         standardOutput versionStr
-        errorOutput versionStr
+        ignoreExitValue true
         commandLine "git", "rev-parse", "--short", "HEAD"
+    }
+    if (result.exitValue != 0) {
+        throw new GradleException("Failed to get git version")
     }
 
     return [versionStr.toString().trim(), true]
