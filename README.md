@@ -1,8 +1,6 @@
-[ ![Download](https://api.bintray.com/packages/natanbc/maven/lavadsp/images/download.svg) ](https://bintray.com/natanbc/maven/lavadsp/_latestVersion)
-
 # lavadsp
 
-A bunch of lavaplayer audio filters implemented with native code
+A bunch of lavaplayer audio filters implemented with native code forked from https://github.com/natanbc/lavadsp with mac m1 natives fixes
 
 ## Getting Started
 
@@ -10,36 +8,36 @@ A bunch of lavaplayer audio filters implemented with native code
 
 Replace `VERSION` with the version you want to use. The latest version can be found in the badge above.
 
+#### Gradle
+
+```gradle
+repositories {
+    maven{ "http://maven.arbjerg.dev/releases" }
+}
+
+dependencies {
+    compile "dev.arbjerg:lavadsp:VERSION"
+}
+```
+
 #### Maven
 
 ```xml
 <repositories>
     <repository>
-        <id>jcenter</id>
-        <name>jcenter</name>
-        <url>http://jcenter.bintray.com/</url>
+        <id>arbjerg</id>
+        <name>arbjerg</name>
+        <url>http://maven.arbjerg.dev/releases</url>
     </repository>
 </repositories>
 
 <dependencies>
     <dependency>
-        <groupId>com.github.natanbc</groupId>
+        <groupId>dev.arbjerg</groupId>
         <artifactId>lavadsp</artifactId>
         <version>VERSION</version>
     </dependency>
 </dependencies>
-```
-
-#### Gradle
-
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile 'com.github.natanbc:lavadsp:VERSION'
-}
 ```
 
 ### Basic Usage
